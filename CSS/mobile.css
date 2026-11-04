@@ -1,0 +1,205 @@
+/* Signal — Copyright (C) 2026 Retronix. SPDX-License-Identifier: GPL-3.0-only. See LICENSE. */
+/* Signal — small screens (phones and narrow windows)
+   Uses the app frame width, so it works the same in any browser size. */
+
+/* component tweaks as the screen narrows */
+@container app (max-width:900px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@container app (max-width:520px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+@container app (max-width:760px){.cells{grid-template-columns:repeat(15,minmax(0,1fr))}}
+
+
+
+
+
+@container app (max-width:640px){.vrow{grid-template-columns:minmax(0,1fr)}.vrow .end{justify-content:flex-start}}
+@container app (max-width:640px){.pstats{grid-template-columns:minmax(0,1fr)}}
+@container app (max-width:640px){.week{grid-template-columns:minmax(0,1fr);min-width:0}}
+@container app (max-width:640px){.wday{min-height:0}}
+
+
+/* phone app layout: bottom tabs, day strip, sheets, + button */
+@container app (max-width:760px){
+  .topin{gap:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px}
+  .topin .brand small{display:none}
+  .topin .status{display:inline-flex!important}
+  .topbar .brand{padding:0}
+  .topbar .mark{width:26px;height:26px}
+  .topbar .brand b{font-size:14px}
+  .bnav{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;z-index:15;
+    padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px));padding-top:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom,0px));
+    background:rgba(27,26,23,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line)}
+  .bnav button{display:flex;flex-direction:column;align-items:center;gap:3px;border:0;background:none;color:var(--dim);font-size:11px;font-weight:600;padding:6px 4px;border-radius:10px;min-height:48px}
+  .bnav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .bnav button[aria-current="page"]{color:var(--munsell-hi)}
+  .bnav button[aria-current="page"] svg{filter:drop-shadow(0 0 6px rgba(85,174,207,.45))}
+  main{padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:16px calc(92px + env(safe-area-inset-bottom,0px))}
+  .phead h1{font-size:22px}
+  .phead p{font-size:13px}
+  .phead .status{display:none}
+  main{max-width:none}
+  .card{padding:15px 14px;border-radius:14px}
+  .btn{min-height:40px;padding:8px 14px}
+  .btn.sm{min-height:36px;padding:6px 12px;font-size:13px}
+  .link{min-height:36px;padding:6px 8px}
+  .inp,select.inp,textarea,input[type=date],input[type=time]{font-size:16px!important}
+  .tchip{padding:8px 13px;font-size:13px}
+  
+  
+  .subtabs button{padding:9px 14px;font-size:13.5px}
+  .sw{width:46px;height:28px}
+  .sw::after{width:22px;height:22px}
+  .sw[aria-checked="true"]::after{transform:translateX(18px)}
+  .cells{grid-template-columns:repeat(10,minmax(0,1fr));gap:5px}
+  .d{font-size:10px;color:var(--dim)}
+  .d.l3{color:#10140f}
+  .mrow{grid-template-columns:minmax(0,1fr);gap:6px}
+  .ck label{padding:4px 0;font-size:14px}
+  .ck input{width:20px;height:20px}
+  /* planner: day strip + one day at a time */
+  .daystrip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;position:sticky;top:51px;z-index:5;
+    background:rgba(20,20,18,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:12px;padding:5px}
+  .daystrip button{border:0;background:none;border-radius:9px;padding:6px 0 7px;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);min-height:54px}
+  .daystrip button small{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+  .daystrip button b{font-size:17px;color:var(--ink)}
+  .daystrip button i{width:5px;height:5px;border-radius:50%;background:transparent}
+  .daystrip button i.has{background:var(--munsell-hi)}
+  .daystrip button i.all{background:var(--good)}
+  .daystrip button.today b{color:var(--munsell-hi)}
+  .daystrip button[aria-pressed="true"]{background:var(--munsell);color:#fff}
+  .daystrip button[aria-pressed="true"] b{color:#fff}
+  .daystrip button[aria-pressed="true"] i.has,.daystrip button[aria-pressed="true"] i.all{background:#fff}
+  .weekwrap{overflow:visible;margin:0;padding:0}
+  .week{grid-template-columns:minmax(0,1fr);min-width:0}
+  .wday{display:none;min-height:200px;padding:12px}
+  .wday.sel{display:flex}
+  .whead b{font-size:18px}
+  .ev{padding:12px 12px 12px 15px;gap:7px}
+  .ev .ti{font-size:15px;padding-right:34px}
+  .ev .tm{font-size:12px}
+  .ev .tick{width:28px;height:28px;top:10px;right:10px}
+  .ev.done .tick::after{width:6px;height:11px}
+  .dadd{padding:12px;font-size:14px}
+  .pbar{grid-template-columns:96px minmax(0,1fr) 44px}
+  .ring svg{width:78px;height:78px}
+  .ptools{gap:8px}
+  #newItem{display:none}
+  .ptools>.acts:first-child .lbl{flex-basis:100%;margin:2px 0 0!important}
+  .fab{display:grid}
+  /* sheets */
+  .modal{place-items:end stretch;padding:0}
+  .modal .card,.modal.wide .card{width:100%;max-height:88%;border-radius:18px 18px 0 0;padding-bottom:calc(18px + env(safe-area-inset-bottom,0px));animation:sheet .22s ease-out}
+  .modal .card::before{content:"";align-self:center;width:38px;height:4px;border-radius:99px;background:var(--line-2);margin:-6px 0 2px}
+  .frow{grid-template-columns:1fr 1fr}
+  .tagrow{grid-template-columns:40px minmax(0,1fr) auto}
+  .tagrow .n{display:none}
+  .tagrow input[type=color],.tagadd input[type=color]{width:40px;height:40px}
+  .tagadd{grid-template-columns:40px minmax(0,1fr) auto}
+  .toast{left:50%;right:auto;transform:translateX(-50%);bottom:calc(86px + env(safe-area-inset-bottom,0px));white-space:nowrap}
+  .vrow{padding:14px 2px}
+  .vrow .end{gap:2px}
+  
+  .search{max-width:none;flex-basis:100%}
+}
+
+/* idea board on phones: swipe between status columns */
+@container app (max-width:760px){
+  .vboard{grid-auto-columns:84%;scroll-snap-type:x mandatory;margin:0 -2px}
+  .stsel{font-size:12.5px;padding:5px 24px 5px 11px}
+}
+
+/* idea list on phones */
+@container app (max-width:760px){
+  .vfilters{justify-content:stretch}
+  .vfilters .search{max-width:none;flex-basis:100%}
+  .vfilters select.inp{flex:1 1 0;max-width:none;min-width:0;padding-left:10px;font-size:14px!important}
+  #fClear{flex-basis:100%;text-align:right;min-height:0;padding:0 4px;margin-top:-2px}
+  .vrow{grid-template-columns:minmax(0,1fr) auto}
+  .vrow>div:first-child{grid-column:1/-1}
+  .vrow .end{justify-content:flex-end}
+}
+
+@container app (max-width:760px){
+  .ptools .acts:last-child{width:100%}
+  .fsel{flex:1;max-width:none;font-size:14px!important}
+}
+
+/* idea vault capture on phones */
+@container app (max-width:760px){
+  
+  
+  
+  
+  .vtools{gap:10px}
+}
+
+/* keep Start over at the top right on phones */
+@container app (max-width:760px){
+  #p-track .phead{flex-wrap:nowrap}
+  #p-track .phead>div:first-child{min-width:0}
+  #p-track .phead>.acts{flex:none;margin-top:2px}
+}
+
+/* idea vault header on phones */
+@container app (max-width:760px){
+  
+  
+  #editDesc{font-size:16px}
+}
+
+/* stats column becomes a slim 3-up strip on phones */
+@container app (max-width:760px){
+  .toprow{grid-template-columns:minmax(0,1fr);gap:12px}
+  .statcol{flex-direction:row;order:-1}
+  .srow2{padding:12px 12px 12px 14px;grid-template-columns:1fr}
+  .srow2+.srow2{border-top:0;border-left:1px solid var(--line)}
+  .srow2::before{top:12px;bottom:12px}
+  .srow2 .sk{font-size:9.5px;letter-spacing:.1em}
+  .srow2 b{font-size:22px}
+  .srow2 .ss{justify-self:start;padding:0;font-size:11px}
+}
+
+/* task rows on phones */
+@container app (max-width:760px){
+  .tk{padding:14px 14px}
+  .tk .tx{flex-direction:column;gap:2px}
+  .tk .cb{width:26px;height:26px}
+  .tke{grid-template-columns:auto minmax(0,1fr) auto;row-gap:6px}
+  .tke .tkd{grid-column:2/3;grid-row:2}
+  .tke .inp{font-size:16px!important}
+  .thero .acts{flex-wrap:wrap;justify-content:flex-end}
+}
+
+/* phone: keep the task card headers on one line */
+@container app (max-width:760px){
+  .thero{flex-direction:column;align-items:stretch;gap:10px}
+  .thero .acts{flex-wrap:nowrap;gap:6px;justify-content:flex-start}
+  .thero #editDaily{margin-right:auto;padding-left:0}
+  .thero .acts .btn.sm{min-height:34px;padding:4px 10px}
+  #editDaily,#editWeekly{font-size:13px;padding:6px 4px}
+}
+
+/* cycles on phones */
+@container app (max-width:760px){
+  .cycstats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hrow{grid-template-columns:minmax(0,1fr) 110px}
+  .hrow .hw{grid-column:1/-1;grid-row:2;white-space:normal}
+  .rq textarea,.cyc textarea{font-size:16px}
+}
+
+/* statistics on phones */
+@container app (max-width:760px){
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .kpi{padding:12px}
+  .kpi b{font-size:22px}
+  .sgrid{grid-template-columns:minmax(0,1fr)}
+  .anbar{flex-direction:column;align-items:stretch}
+  .anbar .vseg{display:grid;grid-template-columns:repeat(4,1fr)}
+  .anbar .acts{justify-content:space-between}
+  .hb2{grid-template-columns:90px minmax(0,1fr) 78px}
+  .lstats{gap:12px}
+  .lstats div{align-items:flex-start}
+  .anform{grid-template-columns:1fr}
+  .bnav button{font-size:10px}
+  .smrow{grid-template-columns:44px minmax(0,1fr)}
+}

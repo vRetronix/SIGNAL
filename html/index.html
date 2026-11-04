@@ -1,0 +1,252 @@
+<!doctype html>
+<!-- Signal — Copyright (C) 2026 Retronix. SPDX-License-Identifier: GPL-3.0-only. See LICENSE. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Signal Tracker</title>
+<meta name="theme-color" content="#1b1a17">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Signal">
+<meta name="format-detection" content="telephone=no">
+<link rel="icon" type="image/svg+xml" href="../assets/logos/signal-mark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/icon-32.png">
+<link rel="apple-touch-icon" href="../assets/icons/icon-180.png">
+<link rel="stylesheet" href="../CSS/base.css">
+<link rel="stylesheet" href="../CSS/mobile.css">
+<link rel="stylesheet" href="../CSS/desktop.css" media="(min-width: 761px)">
+</head>
+<body>
+<div class="app" id="app">
+<div class="scroller" id="scroller">
+  <header class="topbar">
+    <div class="topin">
+      <div class="brand"><img class="mark" src="../assets/logos/signal-mark.svg" alt=""><b>SIGNAL</b></div>
+      <span class="status" id="topStatus">Day 1 of 90</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- TRACKER -->
+    <section class="page" id="p-track">
+      <div class="phead">
+        <h1>Content Tracker</h1>
+        <span id="resetBox" class="acts"></span>
+      </div>
+
+      <div id="exBanner" class="go" hidden>
+        <span id="exText">Start your 90 day Tracker!</span>
+        <button class="btn blue begin" id="startFresh">START HERE</button>
+      </div>
+
+      <div class="card cyc" id="cycleCard" hidden>
+        <h2 id="cycTitle">Cycle 1 complete</h2>
+        <div class="cycstats" id="cycStats"></div>
+        <label class="field"><span>Biggest win</span><textarea class="inp" id="cycWin" rows="2"></textarea></label>
+        <label class="field"><span>Change next time</span><textarea class="inp" id="cycChange" rows="2"></textarea></label>
+        <div class="acts end"><button class="btn blue" id="cycNext" type="button">Start Cycle 2</button></div>
+      </div>
+
+      <div class="toprow">
+        <div class="card today2">
+          <div class="thero">
+            <h2 id="dayTitle">Today</h2>
+            <div class="acts"><button class="link" id="editDaily" type="button">Edit</button><button class="btn sm" id="prevDay" aria-label="Previous day">‹</button><button class="btn sm" id="goToday">Today</button><button class="btn sm" id="nextDay" aria-label="Next day">›</button></div>
+          </div>
+          <div class="tks" id="dayRows"></div>
+          <div class="bar"><i id="dayBar"></i></div>
+        </div>
+        <aside class="statcol" aria-label="Progress">
+          <div class="srow2 s-streak"><span class="sk">Streak</span><b id="sStreak">0</b><div class="sbar"><i id="sStreakBar"></i></div></div>
+          <div class="srow2 s-days"><span class="sk">Days</span><b id="sDays">0</b><div class="sbar"><i id="sBar"></i></div></div>
+          <div class="srow2 s-week"><span class="sk">This week</span><b id="sWeek">0</b><div class="sbar"><i id="sWeekBar"></i></div></div>
+        </aside>
+      </div>
+
+      <div class="card">
+        <div class="chead"><h2 id="weekTitle">Week 1</h2><div class="acts"><button class="link" id="editWeekly" type="button">Edit</button><span class="pill" id="weekPill"></span></div></div>
+        <div class="phase" id="phaseBar"></div>
+        <div class="tks" id="weekList"></div>
+        <div class="grow" id="growRow"></div>
+        <div class="review" id="reviewBox" hidden>
+          <h3 id="monthTitle">Month review</h3>
+          <div class="rq" id="monthQs"></div>
+          <div class="acts end"><button class="btn blue sm" id="monthDone" type="button">Mark reviewed</button></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>90 days</h2>
+        <div class="heat" id="heat"></div>
+      </div>
+
+      <div class="card quiet" id="historyCard" hidden>
+        <h2>Cycles</h2>
+        <div class="hist" id="histList"></div>
+      </div>
+
+      <details class="card quiet" id="setupCard">
+        <summary><h2 id="setupTitle">Get Started</h2><span class="pill" id="setupPill"></span></summary>
+        <label class="setrow">Day 1 <input type="date" id="start" class="inp"></label>
+        <ul class="ck" id="setupList"></ul>
+      </details>
+    </section>
+
+    <!-- CONTENT PLANNER -->
+    <section class="page" id="p-plan" hidden>
+      <div class="phead">
+        <h1>Content Planner</h1>
+        <button class="btn blue" id="newItem">+ New</button>
+      </div>
+
+      <div class="card">
+        <div class="pstats">
+          <div class="ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10"/><circle id="ringArc" cx="50" cy="50" r="42" fill="none" stroke="var(--good)" stroke-width="10" stroke-linecap="round" stroke-dasharray="0 264" transform="rotate(-90 50 50)"/><text id="ringPct" x="50" y="56" text-anchor="middle" fill="#ECEAE4" font-size="20" font-weight="700">0%</text></svg>
+            <b id="ringNum">0 of 0 posted</b></div>
+          <div class="pbars" id="pbars"></div>
+        </div>
+      </div>
+
+      <div class="ptools">
+        <div class="acts"><button class="btn sm" id="wPrev" aria-label="Previous week">‹</button><button class="btn sm" id="wToday">This week</button><button class="btn sm" id="wNext" aria-label="Next week">›</button><span class="lbl" id="weekRange"></span></div>
+        <select class="inp fsel" id="pfSel" aria-label="Filter by platform"></select>
+      </div>
+      <div class="daystrip" id="dayStrip" role="group" aria-label="Pick a day"></div>
+      <div class="weekwrap"><div class="week" id="week"></div></div>
+    </section>
+
+    <!-- IDEA VAULT -->
+    <section class="page" id="p-vault" hidden>
+      <div class="phead">
+        <h1>Idea Vault</h1>
+        <button class="btn blue" id="addIdea" type="button">+ Add idea</button>
+      </div>
+
+      <div class="card vault">
+        <div class="tools vtools">
+          <div class="vseg" role="group" aria-label="View"><button id="vv-list" data-v="list">List</button><button id="vv-board" data-v="board">Board</button></div>
+          <div class="vfilters">
+            <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input class="inp" id="vSearch" placeholder="Search" aria-label="Search ideas"></div>
+            <select class="inp" id="fStage" aria-label="Filter by status"></select>
+            <select class="inp" id="fType" aria-label="Filter by type"></select>
+            <select class="inp" id="fPlat" aria-label="Filter by platform"></select>
+            <button class="link" id="fClear" hidden>Clear</button>
+          </div>
+        </div>
+        <div class="ilist" id="vList"></div>
+        <div class="vboard" id="vBoard" hidden></div>
+      </div>
+    </section>
+
+    <!-- STATISTICS -->
+    <section class="page" id="p-stats" hidden>
+      <div class="phead">
+        <h1>Statistics</h1>
+        <button class="btn blue" id="anLog" type="button">+ Log stats</button>
+      </div>
+      <div class="anbar">
+        <div class="vseg" role="group" aria-label="Date range" id="anRange"><button data-r="7">7D</button><button data-r="30">30D</button><button data-r="90">90D</button><button data-r="cycle">Cycle</button></div>
+        <div class="acts"><select class="inp fsel" id="anPlat" aria-label="Platform"></select><button class="link" id="anData" type="button">Data</button></div>
+      </div>
+      <div class="anempty card" id="anEmpty" hidden>
+        <h2>No stats yet</h2>
+        <div class="acts"><button class="btn blue" id="anLog2" type="button">+ Log stats</button><button class="btn" id="anPost2" type="button">Add post result</button><button class="link" id="anData2" type="button">Import</button></div>
+      </div>
+      <div id="anBody">
+        <div class="kpis" id="anKpis"></div>
+        <div class="card">
+          <div class="chead"><h2>Followers</h2><div class="vseg" role="group" aria-label="Follower view"><button id="fgPct" data-fg="pct">% growth</button><button id="fgAbs" data-fg="abs">Total</button></div></div>
+          <div class="chart" id="chFollow"></div>
+          <div class="legend" id="lgFollow"></div>
+        </div>
+        <div class="sgrid">
+          <div class="card"><h2>Views</h2><div class="chart" id="chViews"></div></div>
+          <div class="card"><h2>Views by platform</h2><div class="hbars" id="chShare"></div></div>
+        </div>
+        <div class="card" id="liveCard">
+          <div class="chead"><h2>Live viewers</h2><div class="lstats" id="liveStats"></div></div>
+          <div class="chart" id="chLive"></div>
+        </div>
+        <div class="card">
+          <div class="chead"><h2>Top content</h2><button class="link" id="anPost" type="button">+ Add result</button></div>
+          <div class="tblwrap"><table class="antbl" id="topTbl"></table></div>
+        </div>
+        <div class="card">
+          <div class="chead"><h2>Posts and views</h2><div class="lstats" id="conStats"></div></div>
+          <div class="smrow"><span class="cap">Posts</span><div class="chart sm" id="chPosts"></div></div>
+          <div class="smrow"><span class="cap">Views</span><div class="chart sm" id="chWkViews"></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav class="bnav" aria-label="Pages">
+  <button data-tab="track" id="bn-track"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Content Tracker</button>
+  <button data-tab="plan" id="bn-plan"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Planner</button>
+  <button data-tab="vault" id="bn-vault"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>Idea Vault</button>
+  <button data-tab="stats" id="bn-stats"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Statistics</button>
+</nav>
+
+<!-- Idea (new / edit) -->
+<div class="modal" id="editModal" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+    <div class="chead"><h2 id="editTitle">Edit idea</h2><button class="link" id="editMultiBtn" type="button">Add several</button></div>
+    <label class="field" id="editOneWrap"><span>Title</span><input class="inp" id="editText" autocomplete="off"></label>
+    <label class="field" id="editDescWrap"><span>Description</span><textarea class="inp" id="editDesc" rows="3"></textarea></label>
+    <label class="field" id="editMultiWrap" hidden><span>Ideas</span><textarea class="inp" id="editMulti" rows="6" placeholder="One per line"></textarea></label>
+    <label class="field"><span>Status</span><select class="inp" id="editStatus"></select></label>
+    <div class="field"><span class="flab">Type<button class="link" data-tags type="button">Edit tags</button></span><div class="tchips" id="editTypes"></div></div>
+    <div class="field"><span>Platform</span><div class="tchips" id="editPlats"></div></div>
+    <div class="field" id="editSchedWrap"><span>Schedule</span>
+      <div class="sched2"><input class="inp" type="date" id="editDate" aria-label="Schedule for"><button class="btn" id="editSched" type="button">Schedule</button></div>
+    </div>
+    <div class="acts"><button class="link danger" id="editDel">Delete</button><span class="acts"><button class="link" id="editCancel">Cancel</button><button class="btn blue" id="editSave">Save</button></span></div>
+  </div>
+</div>
+
+<!-- Planner item -->
+<div class="modal wide" id="itemModal" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="itemTitle">
+    <h2 id="itemTitle">New item</h2>
+    <label class="field" id="fromVaultWrap"><span>From Idea Vault</span><select class="inp" id="fromVault"></select></label>
+    <label class="field"><span>Title</span><input class="inp" id="itText" autocomplete="off"></label>
+    <div class="field"><span class="flab">Type<button class="link" data-tags type="button">Edit tags</button></span><div class="tchips" id="itTypes"></div></div>
+    <div class="field"><span>Platform</span><div class="tchips" id="itPlats"></div></div>
+    <div class="frow">
+      <label class="field"><span>Day</span><input class="inp" type="date" id="itDate"></label>
+      <label class="field"><span id="itTimeLbl">Time</span><input class="inp" type="time" id="itTime"></label>
+    </div>
+    <label class="swrow"><button class="sw" id="itDone" role="switch" aria-checked="false" aria-label="Posted" type="button"></button><b id="itDoneLbl">Posted</b></label>
+    <div class="acts"><span class="acts"><button class="link danger" id="itDel">Delete</button><button class="link" id="itBack">Back to vault</button></span><span class="acts"><button class="link" id="itCancel">Cancel</button><button class="btn blue" id="itSave">Save</button></span></div>
+  </div>
+</div>
+
+<!-- Tags -->
+<div class="modal wide" id="tagModal" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="tagTitle">
+    <div class="chead"><h2 id="tagTitle">Tags</h2><button class="btn sm" id="tagClose">Done</button></div>
+    <div class="subtabs" id="tagTabs"></div>
+    <div class="tagsec" id="tagList"></div>
+    <form class="tagadd" id="tagAdd"><input type="color" id="tagNewColor" value="#55AECF" aria-label="New tag color"><input class="inp" id="tagNewName" placeholder="New tag" required><button class="btn blue sm" type="submit">Add</button></form>
+  </div>
+</div>
+
+<!-- Statistics entry -->
+<div class="modal" id="anModal" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="anmTitle">
+    <h2 id="anmTitle">Log stats</h2>
+    <div id="anmBody"></div>
+    <div class="acts end"><button class="link" id="anmCancel" type="button">Cancel</button><button class="btn blue" id="anmSave" type="button">Save</button></div>
+  </div>
+</div>
+
+<div class="tip" id="tip" hidden></div>
+<div class="toast" id="toast" role="status"></div>
+</div>
+
+<script src="../Javascript/app.js"></script>
+</body>
+</html>

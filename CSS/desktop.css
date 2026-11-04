@@ -1,0 +1,15 @@
+/* Signal — Copyright (C) 2026 Retronix. SPDX-License-Identifier: GPL-3.0-only. See LICENSE. */
+/* Signal — desktop (wider than 760px) */
+
+/* desktop: full-width pages with a floating bottom dock */
+@media (min-width:761px){
+  .app .fab{display:none}
+  .bnav{display:flex;position:fixed;z-index:15;gap:4px;background:rgba(27,26,23,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--line-2)}
+  .bnav button{display:flex;align-items:center;gap:9px;border:0;background:none;color:var(--muted);font-weight:600;font-size:14px;padding:10px 20px;border-radius:12px}
+  .bnav button svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .bnav button:hover{color:var(--ink);background:rgba(255,255,255,.05)}
+  .bnav button[aria-current="page"]{color:var(--ink);background:rgba(255,255,255,.09)}
+  .bnav button[aria-current="page"] svg{color:var(--munsell-hi)}
+  .bnav{left:50%;bottom:22px;transform:translateX(-50%);padding:6px;border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.45)}
+  main{padding-bottom:120px}
+}
