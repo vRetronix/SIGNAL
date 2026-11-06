@@ -8,7 +8,7 @@ Open `html/index.html` in a browser. No install, no accounts, no backend. Data s
 ```
 html/        index.html
 CSS/         base.css, mobile.css, desktop.css
-Javascript/  app.js
+Javascript/  core.js, tracker.js, planner.js, vault.js, editor.js, stats.js
 assets/      logos, icons, fonts, images
 ```
 

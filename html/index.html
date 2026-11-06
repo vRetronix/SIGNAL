@@ -46,7 +46,7 @@
         <div class="cycstats" id="cycStats"></div>
         <label class="field"><span>Biggest win</span><textarea class="inp" id="cycWin" rows="2"></textarea></label>
         <label class="field"><span>Change next time</span><textarea class="inp" id="cycChange" rows="2"></textarea></label>
-        <div class="acts end"><button class="btn blue" id="cycNext" type="button">Start Cycle 2</button></div>
+        <div class="acts end"><button class="btn" id="cycRecap" type="button">Recap</button><button class="btn blue" id="cycNext" type="button">Start Cycle 2</button></div>
       </div>
 
       <div class="toprow">
@@ -70,11 +70,6 @@
         <div class="phase" id="phaseBar"></div>
         <div class="tks" id="weekList"></div>
         <div class="grow" id="growRow"></div>
-        <div class="review" id="reviewBox" hidden>
-          <h3 id="monthTitle">Month review</h3>
-          <div class="rq" id="monthQs"></div>
-          <div class="acts end"><button class="btn blue sm" id="monthDone" type="button">Mark reviewed</button></div>
-        </div>
       </div>
 
       <div class="card">
@@ -82,15 +77,19 @@
         <div class="heat" id="heat"></div>
       </div>
 
-      <div class="card quiet" id="historyCard" hidden>
-        <h2>Cycles</h2>
-        <div class="hist" id="histList"></div>
-      </div>
-
-      <details class="card quiet" id="setupCard">
-        <summary><h2 id="setupTitle">Get Started</h2><span class="pill" id="setupPill"></span></summary>
-        <label class="setrow">Day 1 <input type="date" id="start" class="inp"></label>
-        <ul class="ck" id="setupList"></ul>
+      <details class="card quiet" id="cycleSec">
+        <summary><h2 id="cycSecTitle">Cycle 1</h2><span class="pill warn" id="cycSecPill" hidden></span></summary>
+        <div class="review" id="reviewBox" hidden>
+          <h3 id="monthTitle">Month review</h3>
+          <div class="rq" id="monthQs"></div>
+          <div class="acts end"><button class="btn blue sm" id="monthDone" type="button">Mark reviewed</button></div>
+        </div>
+        <div class="csub">
+          <h3 id="setupTitle">Get Started</h3>
+          <label class="setrow">Day 1 <input type="date" id="start" class="inp"></label>
+          <ul class="ck" id="setupList"></ul>
+        </div>
+        <div class="csub hist" id="historyBox" hidden><h3>Cycles</h3><div id="histList"></div></div>
       </details>
     </section>
 
@@ -128,11 +127,16 @@
         <div class="tools vtools">
           <div class="vseg" role="group" aria-label="View"><button id="vv-list" data-v="list">List</button><button id="vv-board" data-v="board">Board</button></div>
           <div class="vfilters">
-            <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input class="inp" id="vSearch" placeholder="Search" aria-label="Search ideas"></div>
-            <select class="inp" id="fStage" aria-label="Filter by status"></select>
-            <select class="inp" id="fType" aria-label="Filter by type"></select>
-            <select class="inp" id="fPlat" aria-label="Filter by platform"></select>
-            <button class="link" id="fClear" hidden>Clear</button>
+            <div class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input class="inp" id="vSearch" type="search" placeholder="Search" aria-label="Search ideas"></div>
+            <div class="fwrap">
+              <button class="btn fbtn" id="fBtn" type="button" aria-haspopup="true" aria-controls="fMenu">Filter</button>
+              <div class="fmenu" id="fMenu" hidden>
+                <label class="field" id="fStageWrap"><span>Status</span><select class="inp" id="fStage"></select></label>
+                <label class="field"><span>Type</span><select class="inp" id="fType"></select></label>
+                <label class="field"><span>Platform</span><select class="inp" id="fPlat"></select></label>
+                <button class="link" id="fClear" type="button" hidden>Clear filters</button>
+              </div>
+            </div>
           </div>
         </div>
         <div class="ilist" id="vList"></div>
@@ -155,29 +159,35 @@
         <div class="acts"><button class="btn blue" id="anLog2" type="button">+ Log stats</button><button class="btn" id="anPost2" type="button">Add post result</button><button class="link" id="anData2" type="button">Import</button></div>
       </div>
       <div id="anBody">
-        <div class="kpis" id="anKpis"></div>
+        <div class="kpis lead" id="anLead"></div>
         <div class="card">
           <div class="chead"><h2>Followers</h2><div class="vseg" role="group" aria-label="Follower view"><button id="fgPct" data-fg="pct">% growth</button><button id="fgAbs" data-fg="abs">Total</button></div></div>
           <div class="chart" id="chFollow"></div>
           <div class="legend" id="lgFollow"></div>
         </div>
-        <div class="sgrid">
-          <div class="card"><h2>Views</h2><div class="chart" id="chViews"></div></div>
-          <div class="card"><h2>Views by platform</h2><div class="hbars" id="chShare"></div></div>
-        </div>
-        <div class="card" id="liveCard">
-          <div class="chead"><h2>Live viewers</h2><div class="lstats" id="liveStats"></div></div>
-          <div class="chart" id="chLive"></div>
-        </div>
-        <div class="card">
-          <div class="chead"><h2>Top content</h2><button class="link" id="anPost" type="button">+ Add result</button></div>
-          <div class="tblwrap"><table class="antbl" id="topTbl"></table></div>
-        </div>
-        <div class="card">
-          <div class="chead"><h2>Posts and views</h2><div class="lstats" id="conStats"></div></div>
-          <div class="smrow"><span class="cap">Posts</span><div class="chart sm" id="chPosts"></div></div>
-          <div class="smrow"><span class="cap">Views</span><div class="chart sm" id="chWkViews"></div></div>
-        </div>
+        <details class="more" id="anMore">
+          <summary>More</summary>
+          <div class="morebody">
+            <div class="kpis" id="anKpis"></div>
+            <div class="sgrid">
+              <div class="card"><h2>Views</h2><div class="chart" id="chViews"></div></div>
+              <div class="card"><h2>Views by platform</h2><div class="hbars" id="chShare"></div></div>
+            </div>
+            <div class="card" id="liveCard">
+              <div class="chead"><h2>Live viewers</h2><div class="lstats" id="liveStats"></div></div>
+              <div class="chart" id="chLive"></div>
+            </div>
+            <div class="card">
+              <div class="chead"><h2>Top content</h2><button class="link" id="anPost" type="button">+ Add result</button></div>
+              <div class="tblwrap"><table class="antbl" id="topTbl"></table></div>
+            </div>
+            <div class="card">
+              <div class="chead"><h2>Posts and views</h2><div class="lstats" id="conStats"></div></div>
+              <div class="smrow"><span class="cap">Posts</span><div class="chart sm" id="chPosts"></div></div>
+              <div class="smrow"><span class="cap">Views</span><div class="chart sm" id="chWkViews"></div></div>
+            </div>
+          </div>
+        </details>
       </div>
     </section>
   </main>
@@ -190,37 +200,33 @@
   <button data-tab="stats" id="bn-stats"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Statistics</button>
 </nav>
 
-<!-- Idea (new / edit) -->
-<div class="modal" id="editModal" hidden>
-  <div class="card" role="dialog" aria-modal="true" aria-labelledby="editTitle">
-    <div class="chead"><h2 id="editTitle">Edit idea</h2><button class="link" id="editMultiBtn" type="button">Add several</button></div>
-    <label class="field" id="editOneWrap"><span>Title</span><input class="inp" id="editText" autocomplete="off"></label>
-    <label class="field" id="editDescWrap"><span>Description</span><textarea class="inp" id="editDesc" rows="3"></textarea></label>
-    <label class="field" id="editMultiWrap" hidden><span>Ideas</span><textarea class="inp" id="editMulti" rows="6" placeholder="One per line"></textarea></label>
-    <label class="field"><span>Status</span><select class="inp" id="editStatus"></select></label>
-    <div class="field"><span class="flab">Type<button class="link" data-tags type="button">Edit tags</button></span><div class="tchips" id="editTypes"></div></div>
-    <div class="field"><span>Platform</span><div class="tchips" id="editPlats"></div></div>
-    <div class="field" id="editSchedWrap"><span>Schedule</span>
-      <div class="sched2"><input class="inp" type="date" id="editDate" aria-label="Schedule for"><button class="btn" id="editSched" type="button">Schedule</button></div>
+<!-- Editor: ideas (no day) and planner posts (a day) -->
+<div class="modal" id="edModal" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="edTitle">
+    <div class="chead"><h2 id="edTitle">New idea</h2><button class="link" id="edMultiBtn" type="button">Add several</button></div>
+    <label class="field" id="edFromWrap"><span>From Idea Vault</span><select class="inp" id="edFrom"></select></label>
+    <label class="field" id="edOneWrap"><span>Title</span><input class="inp" id="edText" autocomplete="off"></label>
+    <label class="field" id="edDescWrap"><span>Description</span><textarea class="inp" id="edDesc" rows="3"></textarea></label>
+    <label class="field" id="edMultiWrap" hidden><span>Titles</span><textarea class="inp" id="edMulti" rows="6" placeholder="One per line"></textarea></label>
+    <div class="field"><span class="flab">Type<button class="link" data-tags type="button">Edit tags</button></span><div class="tchips" id="edTypes"></div></div>
+    <div class="field"><span>Platform</span><div class="tchips" id="edPlats"></div></div>
+    <div class="frow">
+      <div class="field"><span class="flab"><label for="edDate" id="edDayLbl">Day</label><button class="link" id="edClear" type="button">Clear</button></span><input class="inp" type="date" id="edDate"></div>
+      <label class="field" id="edTimeWrap"><span id="edTimeLbl">Time</span><input class="inp" type="time" id="edTime"></label>
     </div>
-    <div class="acts"><button class="link danger" id="editDel">Delete</button><span class="acts"><button class="link" id="editCancel">Cancel</button><button class="btn blue" id="editSave">Save</button></span></div>
+    <label class="field" id="edStatusWrap"><span>Status</span><select class="inp" id="edStatus"></select></label>
+    <div class="field" id="edRepWrap"><span class="flab">Repeat<button class="link" id="edEvery" type="button">Every day</button></span><div class="wdays" id="edDays" role="group" aria-label="Repeat on"></div></div>
+    <div class="swrow" id="edDoneWrap"><button class="sw" id="edDone" role="switch" aria-checked="false" aria-label="Posted" type="button"></button><b id="edDoneLbl">Posted</b></div>
+    <div class="acts"><span class="acts"><button class="link danger" id="edDel" type="button">Delete</button><button class="link" id="edSkip" type="button">Skip this day</button></span><span class="acts"><button class="link" id="edCancel" type="button">Cancel</button><button class="btn blue" id="edSave" type="button">Save</button></span></div>
   </div>
 </div>
 
-<!-- Planner item -->
-<div class="modal wide" id="itemModal" hidden>
-  <div class="card" role="dialog" aria-modal="true" aria-labelledby="itemTitle">
-    <h2 id="itemTitle">New item</h2>
-    <label class="field" id="fromVaultWrap"><span>From Idea Vault</span><select class="inp" id="fromVault"></select></label>
-    <label class="field"><span>Title</span><input class="inp" id="itText" autocomplete="off"></label>
-    <div class="field"><span class="flab">Type<button class="link" data-tags type="button">Edit tags</button></span><div class="tchips" id="itTypes"></div></div>
-    <div class="field"><span>Platform</span><div class="tchips" id="itPlats"></div></div>
-    <div class="frow">
-      <label class="field"><span>Day</span><input class="inp" type="date" id="itDate"></label>
-      <label class="field"><span id="itTimeLbl">Time</span><input class="inp" type="time" id="itTime"></label>
-    </div>
-    <label class="swrow"><button class="sw" id="itDone" role="switch" aria-checked="false" aria-label="Posted" type="button"></button><b id="itDoneLbl">Posted</b></label>
-    <div class="acts"><span class="acts"><button class="link danger" id="itDel">Delete</button><button class="link" id="itBack">Back to vault</button></span><span class="acts"><button class="link" id="itCancel">Cancel</button><button class="btn blue" id="itSave">Save</button></span></div>
+<!-- Cycle recap image -->
+<div class="modal" id="recapModal" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="recapTitle">
+    <div class="chead"><h2 id="recapTitle">Recap</h2><button class="link" id="recapClose" type="button">Close</button></div>
+    <img class="recap" id="recapImg" alt="">
+    <div class="acts end"><button class="btn blue" id="recapSave" type="button">Save image</button></div>
   </div>
 </div>
 
@@ -247,6 +253,11 @@
 <div class="toast" id="toast" role="status"></div>
 </div>
 
-<script src="../Javascript/app.js"></script>
+<script src="../Javascript/core.js"></script>
+<script src="../Javascript/tracker.js"></script>
+<script src="../Javascript/planner.js"></script>
+<script src="../Javascript/vault.js"></script>
+<script src="../Javascript/editor.js"></script>
+<script src="../Javascript/stats.js"></script>
 </body>
 </html>

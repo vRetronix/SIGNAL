@@ -334,7 +334,7 @@ details.card.quiet{background:rgba(20,20,18,.4);box-shadow:none}
 #exBanner .btn.begin{min-width:220px;padding:14px 34px;font-size:15px;font-weight:800;letter-spacing:.12em;border-radius:12px;box-shadow:0 8px 28px rgba(58,147,180,.38)}
 #exBanner .btn.begin:hover{transform:translateY(-1px)}
 /* top row: today on the left, slim stats column on the right */
-.toprow{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:16px;align-items:stretch}
+.toprow{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:16px;align-items:start}
 .statcol{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.01));overflow:hidden}
 .srow2{flex:1;display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto auto;align-content:center;column-gap:8px;row-gap:2px;padding:16px 18px;position:relative}
 .srow2+.srow2{border-top:1px solid var(--line)}
@@ -465,7 +465,7 @@ details.card.quiet{background:rgba(20,20,18,.4);box-shadow:none}
 .anform textarea{width:100%;min-height:150px;font-family:var(--f-mono);font-size:12px}
 /* get started (setup week) */
 #setupCard.first{background:linear-gradient(180deg,var(--glass),var(--glass-2));border-color:rgba(85,174,207,.45);box-shadow:0 0 0 1px rgba(85,174,207,.15),0 8px 24px rgba(0,0,0,.18)}
-#setupCard.first summary h2::after{display:none}
+#cycleSec.first summary h2::after{display:none}
 #setupCard .ck label{font-size:14px;padding:3px 0}
 #setupCard .prog .bar i{background:var(--munsell-hi)}
 #resetBox .link{font-size:13px}
@@ -476,7 +476,7 @@ button,.ev,.vrow,.tchip{touch-action:manipulation;-webkit-tap-highlight-color:tr
   place-content:center;background:linear-gradient(180deg,var(--munsell-hi),var(--munsell));color:#fff;font-size:28px;line-height:1;box-shadow:0 8px 24px rgba(58,147,180,.45)}
 .fab[hidden]{display:none!important}
 @keyframes sheet{from{transform:translateY(40px);opacity:.6}to{transform:none;opacity:1}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 
 
 /* statistics spacing */
@@ -506,3 +506,35 @@ button,.ev,.vrow,.tchip{touch-action:manipulation;-webkit-tap-highlight-color:tr
 .anempty .acts{justify-content:center;flex-wrap:wrap}
 .srow2 b small{font-size:12px}
 #editModal .card>.chead{align-items:center}
+
+/* cycle section: review, setup, history in one fold */
+#cycleSec .csub{display:flex;flex-direction:column;gap:8px}
+#cycleSec h3{margin:0;font-size:13px;font-weight:700;color:var(--muted)}
+#cycleSec .csub+.csub,#cycleSec .review+.csub{border-top:1px solid var(--line);padding-top:12px}
+.hrow .hn .link{font-size:12px;padding:0 4px;margin-left:4px;color:var(--munsell-hi)}
+
+/* planner: repeating posts */
+.ev .rp{color:var(--munsell-hi);margin-right:5px;font-weight:700}
+.wdays{display:flex;gap:6px;flex-wrap:wrap}
+.wd{width:36px;height:36px;border-radius:50%;border:1px solid var(--line-2);background:rgba(255,255,255,.03);color:var(--muted);font-weight:700;font-size:13px}
+.wd[aria-pressed="true"]{background:var(--munsell-soft);border-color:var(--munsell);color:var(--munsell-hi)}
+.flab label{font:inherit;color:inherit}
+
+/* idea vault: one filter button */
+.fwrap{position:relative}
+.fbtn.on{border-color:var(--munsell);color:var(--munsell-hi);background:var(--munsell-soft)}
+.fmenu{position:absolute;right:0;top:calc(100% + 6px);z-index:30;width:240px;display:flex;flex-direction:column;gap:10px;padding:14px;border:1px solid var(--line-2);border-radius:12px;background:#22211d;box-shadow:0 16px 40px rgba(0,0,0,.45)}
+.fmenu select.inp{width:100%;max-width:none;flex:none}
+.fmenu .link{align-self:flex-start;padding-left:0}
+
+/* statistics: lead row + More */
+.kpis.lead{grid-template-columns:repeat(3,minmax(0,1fr))}
+.more>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--line-2);border-radius:9px;color:var(--muted);font-weight:600;font-size:13px}
+.more>summary::-webkit-details-marker{display:none}
+.more>summary::after{content:"⌄";font-size:12px}
+.more[open]>summary{color:var(--ink);margin-bottom:16px}
+.more[open]>summary::after{content:"⌃"}
+.morebody{display:flex;flex-direction:column;gap:16px}
+
+/* recap */
+.recap{display:block;width:100%;max-width:420px;margin:0 auto;aspect-ratio:1080/1350;border-radius:12px;border:1px solid var(--line);background:var(--bg)}

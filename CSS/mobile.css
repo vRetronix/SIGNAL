@@ -203,3 +203,12 @@
   .bnav button{font-size:10px}
   .smrow{grid-template-columns:44px minmax(0,1fr)}
 }
+@container app (max-width:760px){
+  .fwrap{flex:none}
+  .vfilters .search{flex:1 1 0;min-width:0}
+  .vfilters{flex-wrap:nowrap}
+  .kpis.lead{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .kpis.lead .kpi{padding:12px}
+  .kpis.lead .kpi b{font-size:22px}
+  .wd{width:38px;height:38px}
+}
