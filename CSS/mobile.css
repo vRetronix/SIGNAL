@@ -76,7 +76,6 @@
   .whead b{font-size:18px}
   .ev{padding:12px 12px 12px 15px;gap:7px}
   .ev .ti{font-size:15px;padding-right:34px}
-  .ev .tm{font-size:12px}
   .ev .tick{width:28px;height:28px;top:10px;right:10px}
   .ev.done .tick::after{width:6px;height:11px}
   .dadd{padding:12px;font-size:14px}

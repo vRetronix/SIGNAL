@@ -57,7 +57,7 @@ function renderBoard(base){
   [['Scheduled',planned.filter(([k,x])=>okF(x))],['Published',doneIn(lim,iso(t)).filter(([k,x])=>okF(x)).reverse()]].forEach(([n,arr])=>{
     const c=col(n,arr.length,true);
     arr.slice(0,40).forEach(([k,x])=>{const b=document.createElement('button');b.className='vcard'+(n==='Published'?' pub':'');b.style.cursor='pointer';
-      b.innerHTML='<span class="when">'+(x.rep&&n==='Scheduled'?'↻ '+repLabel(x.rep):parse(k).toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}))+(x.time?' · '+fmtTime(x.time):'')+'</span><b>'+esc(x.text)+'</b><span class="tg">'+(x.types||[]).map(ttag).join('')+(x.plats||[]).map(badge).join('')+'</span>';
+      b.innerHTML='<span class="when">'+(x.rep&&n==='Scheduled'?'↻ '+repLabel(x.rep):parse(k).toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}))+'</span><b>'+esc(x.text)+'</b><span class="tg">'+(x.types||[]).map(ttag).join('')+(x.plats||[]).map(badge).join('')+'</span>';
       b.onclick=()=>gotoPlan(k,x.mode);c.appendChild(b)});
     B.appendChild(c)});
 }

@@ -2,7 +2,6 @@
 /* Content Planner: week view, posts and repeating posts. */
 function gotoPlan(k,mode){ui.tab='plan';ui.pf='all';ui.weekOff=Math.floor((utc(parse(k))-utc(weekStart(0)))/(7*DAY));ui.pday=k;render();$('scroller').scrollTo(0,0)}
 
-function fmtTime(t){if(!t)return '';const [h,m]=t.split(':').map(Number);const d=new Date(2000,0,1,h,m);return d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'})}
 const weekStart=(off)=>{const t=today();return addDays(t,-t.getDay()+(off||0)*7)};
 function weeklyReset(){const cut=iso(weekStart(0));let n=0;
   Object.keys(state.plan).forEach(k=>{if(k>=cut)return;const keep=[];state.plan[k].forEach(x=>{if(x.done)keep.push(x);else{n++;state.ideas.push({id:uid(),text:x.text,types:x.types||[],plats:x.plats||[],status:'Ready To Post',created:Date.now(),example:x.example})}});
@@ -34,17 +33,16 @@ function renderPlan(){
   // calendar
   const W=$('week');W.innerHTML='';
   days.forEach(d=>{const k=iso(d),isT=k===iso(t),items=planOn(k).filter(x=>ui.pf==='all'||(x.plats||[]).includes(ui.pf))
-      .sort((a,b)=>(a.done-b.done)||((a.time||'99').localeCompare(b.time||'99')));
+      .sort((a,b)=>a.done-b.done);
     const col=document.createElement('div');col.className='wday'+(isT?' is-today':'')+(k<iso(t)?' past':'')+(k===ui.pday?' sel':'');
     col.innerHTML='<div class="whead"><span><span class="cap">'+d.toLocaleDateString(undefined,{weekday:'short'})+'</span></span><b>'+d.getDate()+'</b></div>'+(items.length?'':'<div class="note" style="text-align:center;padding:14px 0">Nothing planned'+(ui.pf!=='all'?' on '+esc(ui.pf):'')+'</div>');
     items.forEach(it=>{const e=document.createElement('div');e.className='ev'+(it.done?' done':'');e.style.setProperty('--c',tcol('types',(it.types||[])[0]||''));
       e.tabIndex=0;e.setAttribute('role','button');e.setAttribute('aria-label','Edit '+it.text);
-      e.innerHTML=(it.time?'<span class="tm"'+(isLive(it)?' title="Stream lock-in time"':'')+'>'+(isLive(it)?lockSvg:clockSvg)+fmtTime(it.time)+'</span>':'')+'<span class="ti">'+(it.rep?'<span class="rp" title="Repeats '+repLabel(it.rep)+'" aria-label="Repeats">↻</span>':'')+esc(it.text)+'</span><span class="tg">'+(it.types||[]).map(ttag).join('')+(it.plats||[]).map(badge).join('')+'</span><button class="tick" aria-label="'+(it.done?'Mark as not '+M.verb:'Mark as '+M.verb)+'"></button>';
+      e.innerHTML='<span class="ti">'+(it.rep?'<span class="rp" title="Repeats '+repLabel(it.rep)+'" aria-label="Repeats">↻</span>':'')+esc(it.text)+'</span><span class="tg">'+(it.types||[]).map(ttag).join('')+(it.plats||[]).map(badge).join('')+'</span><button class="tick" aria-label="'+(it.done?'Mark as not '+M.verb:'Mark as '+M.verb)+'"></button>';
       e.querySelector('.tick').onclick=ev=>{ev.stopPropagation();const v=!it.done;setDone(k,it,v);commit();if(v)toast(M.done)};
       const open=()=>openEd({k,it});e.onclick=open;e.onkeydown=ev=>{if(ev.target===e&&(ev.key==='Enter'||ev.key===' ')){ev.preventDefault();open()}};col.appendChild(e)});
     const a=document.createElement('button');a.className='dadd';a.textContent='+ Add';a.onclick=()=>openEd({date:k});col.appendChild(a);W.appendChild(col)});
 }
-const isLive=x=>(x.types||[]).includes('Live')||x.mode==='stream';
 
 
 $('wPrev').onclick=()=>{ui.weekOff--;ui.pday=null;render()};$('wNext').onclick=()=>{ui.weekOff++;ui.pday=null;render()};$('wToday').onclick=()=>{ui.weekOff=0;ui.pday=null;render()};

@@ -32,7 +32,7 @@ function ideaTypes(x){if(x.types&&x.types.length)return x.types;const t=x.type||
   return [x.mode==='stream'||STREAM_TYPES.includes(t)?'Live':t==='Long video'?'Long-form':t==='Short'?'Short':t==='Clip'?'Clip':'Post']}
 const ideaPlats=x=>x.plats||(x.platform?[x.platform]:[]);
 
-function fixTasks(s){if(!s.tasks)s.tasks=cloneDef();if(!s.analytics)s.analytics=s.example?sampleAnalytics(today()):{daily:[],content:[],example:false};s.cycle=s.cycle||1;s.history=s.history||[];s.reviews=s.reviews||{};s.grow=s.grow||{};s.repeats=s.repeats||[];(s.tasks.daily||[]).forEach(t=>{if(t.d==='Film, edit or go live')t.d='Record, Edit, or Go Live'});(s.tasks.weekly||[]).forEach(t=>{if(t.k==='Check your numbers and note what worked')t.k='Look back on the week: what worked, what to try next'});
+function fixTasks(s){if(!s.tasks)s.tasks=cloneDef();if(!s.analytics)s.analytics=s.example?sampleAnalytics(today()):{daily:[],content:[],example:false};s.cycle=s.cycle||1;s.history=s.history||[];s.reviews=s.reviews||{};s.grow=s.grow||{};s.repeats=s.repeats||[];Object.values(s.plan||{}).forEach(a=>a.forEach(x=>{delete x.time}));s.repeats.forEach(r=>{delete r.time});(s.tasks.daily||[]).forEach(t=>{if(t.d==='Film, edit or go live')t.d='Record, Edit, or Go Live'});(s.tasks.weekly||[]).forEach(t=>{if(t.k==='Check your numbers and note what worked')t.k='Look back on the week: what worked, what to try next'});
   const conv=(store,kind)=>{Object.keys(store||{}).forEach(n=>{const r=store[n];if(Array.isArray(r)){const o={};r.forEach((v,i)=>{if(v&&DEF_TASKS[kind][i])o[DEF_TASKS[kind][i].id]=1});store[n]=o}})};
   conv(s.days,'daily');conv(s.weeks,'weekly');return s}
 const pad=n=>String(n).padStart(2,'0');
@@ -44,11 +44,11 @@ const today=()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth()
 const fmt=d=>d.toLocaleDateString(undefined,{month:'short',day:'numeric'});
 const uid=()=>Math.random().toString(36).slice(2,9);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-// Repeating posts: {id,text,desc,types,plats,time,days:[0-6],start,end,skip:{iso:1},done:{iso:1}}
+// Repeating posts: {id,text,desc,types,plats,days:[0-6],start,end,skip:{iso:1},done:{iso:1}}
 const WD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const repOn=(r,k)=>k>=r.start&&(!r.end||k<=r.end)&&r.days.includes(parse(k).getDay())&&!(r.skip||{})[k];
 const repLabel=r=>r.days.length===7?'Every day':r.days.map(d=>WD[d]).join(' ');
-const occ=(r,k)=>({id:r.id,rep:r,text:r.text,desc:r.desc||'',types:r.types||[],plats:r.plats||[],time:r.time||'',mode:(r.types||[]).includes('Live')?'stream':'content',done:!!(r.done||{})[k]});
+const occ=(r,k)=>({id:r.id,rep:r,text:r.text,desc:r.desc||'',types:r.types||[],plats:r.plats||[],mode:(r.types||[]).includes('Live')?'stream':'content',done:!!(r.done||{})[k]});
 function planOn(k){const out=(state.plan[k]||[]).slice();(state.repeats||[]).forEach(r=>{if(repOn(r,k))out.push(occ(r,k))});return out}
 function setDone(k,it,v){if(it.rep){const d=it.rep.done=it.rep.done||{};if(v)d[k]=1;else delete d[k]}else it.done=v}
 function doneIn(a,b){const out=[];Object.keys(state.plan).forEach(k=>{if(k>=a&&k<=b)state.plan[k].forEach(x=>{if(x.done)out.push([k,x])})});
@@ -71,20 +71,20 @@ function sample(){
     ex('Collab night with another RP streamer',['Live'],['Kick'],6),ex('Pitch a sponsor for the car meet',['Brand deal'],['Instagram'],7),ex('Monthly server update for the Discord',['Email','Post'],['Discord'],9)];
   ['Open on the crash, then rewind 10 seconds. Caption the chat reactions.','Three-act story from the first night. Cut to 12–15 min.','Poll chat at the start, run the winning heist live.','','Two-day build squeezed into a 60 second timelapse.'].forEach((d,i)=>{if(s.ideas[i])s.ideas[i].desc=d});
   const ws=addDays(t,-t.getDay()),d=t.getDay();
-  const put=(off,mode,text,types,plats,time)=>{const k=iso(addDays(ws,off));(s.plan[k]=s.plan[k]||[]).push({id:uid(),mode,text,types,plats,time:time||'',done:off<d,example:true})};
-  put(0,'content','Schedule graphic for the week',['Post'],['X'],'12:00');put(0,'content','Film heist night intro',['Filming'],['YouTube'],'15:00');
-  put(1,'stream','Heist night',['Live'],['Kick'],'20:00');put(1,'content','Edit weekly recap',['Editing'],['YouTube'],'13:00');
-  put(2,'content','3 clips from heist night',['Clip'],['TikTok','Shorts'],'15:00');put(2,'stream','Community night',['Live'],['Kick','Twitch'],'20:00');
-  put(3,'content','Stream reminder in Retro’s Lounge',['Post'],['Discord'],'18:00');put(3,'content','Sponsor read: energy drink',['Brand deal','Short'],['Instagram'],'16:00');
-  put(4,'stream','Hospital MLO build',['Live'],['Kick'],'19:00');put(5,'content','Weekly recap video',['Long-form'],['YouTube'],'17:00');put(5,'content','Recap cut for Shorts',['Short'],['Shorts'],'17:30');
-  put(6,'stream','Viewer vote special',['Live','Brand deal'],['Kick'],'20:00');
+  const put=(off,mode,text,types,plats)=>{const k=iso(addDays(ws,off));(s.plan[k]=s.plan[k]||[]).push({id:uid(),mode,text,types,plats,done:off<d,example:true})};
+  put(0,'content','Schedule graphic for the week',['Post'],['X']);put(0,'content','Film heist night intro',['Filming'],['YouTube']);
+  put(1,'stream','Heist night',['Live'],['Kick']);put(1,'content','Edit weekly recap',['Editing'],['YouTube']);
+  put(2,'content','3 clips from heist night',['Clip'],['TikTok','Shorts']);put(2,'stream','Community night',['Live'],['Kick','Twitch']);
+  put(3,'content','Stream reminder in Retro’s Lounge',['Post'],['Discord']);put(3,'content','Sponsor read: energy drink',['Brand deal','Short'],['Instagram']);
+  put(4,'stream','Hospital MLO build',['Live'],['Kick']);put(5,'content','Weekly recap video',['Long-form'],['YouTube']);put(5,'content','Recap cut for Shorts',['Short'],['Shorts']);
+  put(6,'stream','Viewer vote special',['Live','Brand deal'],['Kick']);
   return s;
 }
 
 function fresh(){return {v:3,analytics:{daily:[],content:[],example:false},cycle:1,history:[],reviews:{},grow:{},tasks:state&&state.tasks?state.tasks:cloneDef(),tags:state&&state.tags?state.tags:cloneTags(),example:false,edition:state?state.edition:'creator',start:iso(today()),days:{},weeks:{},months:{},setup:[0,0,0,0,0,0,0],pillars:['Pillar 1','Pillar 2','Pillar 3'],ideas:[],plan:{},repeats:[]}}
 function migrate(s){s.v=2;const m=x=>x.mode||((STREAM_TYPES.includes(x.type)||x.type==='Stream'||x.type==='Collab'||((x.platform==='Kick'||x.platform==='Twitch')&&!x.type))?'stream':'content');
   (s.ideas||[]).forEach(x=>{x.mode=m(x);x.stage=x.stage||0;if(x.mode==='stream'&&!STREAM_TYPES.includes(x.type))x.type='Main stream'});
-  Object.values(s.plan||{}).forEach(a=>a.forEach(x=>{x.mode=m(x);x.type=x.type||(x.mode==='stream'?'Main stream':'Post');x.time=x.time||''}));return s}
+  Object.values(s.plan||{}).forEach(a=>a.forEach(x=>{x.mode=m(x);x.type=x.type||(x.mode==='stream'?'Main stream':'Post')}));return s}
 function toV3(s){s.v=3;s.tags=s.tags||cloneTags();(s.ideas||[]).forEach(x=>{x.types=ideaTypes(x);x.plats=ideaPlats(x);delete x.type;delete x.platform;delete x.mode;delete x.stage;delete x.pillar});
   Object.values(s.plan||{}).forEach(a=>a.forEach(x=>{x.types=ideaTypes(x);x.plats=ideaPlats(x);delete x.type;delete x.platform}));return s}
 function load(){try{const r=localStorage.getItem(KEY);if(r){const s=JSON.parse(r);if(s&&s.v===3)return fixTasks(s);if(s&&s.v===2)return fixTasks(toV3(s))}const o=localStorage.getItem(OLDKEY);if(o){const s=JSON.parse(o);if(s&&s.v===1)return fixTasks(toV3(migrate(s)))}}catch(e){}return fixTasks(sample())}
@@ -127,8 +127,6 @@ function chip(kind,name,on,n,fn,id){const b=document.createElement('button');b.t
   b.innerHTML=(name==='all'?'':'<i></i>')+esc(name==='all'?'All':name)+(n!=null?' <span class="n">'+n+'</span>':'');b.onclick=fn;return b}
 const slug=n=>n.replace(/[^a-z0-9]/gi,'');
 const toggle=(arr,n)=>arr.includes(n)?arr.filter(x=>x!==n):arr.concat(n);
-const lockSvg='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
-const clockSvg='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
 
 function render(){renderShell();({track:renderTrack,plan:renderPlan,vault:renderVault,stats:renderStats})[ui.tab]();renderEd();renderTags()}
 function commit(){save();render()}
