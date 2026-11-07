@@ -16,7 +16,10 @@ function sampleAnalytics(t){let seed=7;const rnd=()=>{seed=(seed*16807)%21474836
   const C=[['Cop chase goes wrong in 10 seconds','TikTok','Clip',58000,4100,210],['First night as a new gang','YouTube','Long-form',3100,240,61],['Viewers vote the next heist','Kick','Live',1400,0,380],['Community car meet highlights','TikTok','Short',22000,1500,88],['Hospital MLO timelapse','YouTube','Short',9400,610,44],['Heist night: full stream','Kick','Live',1100,0,290],['3 clips from heist night','TikTok','Clip',14000,820,51],['Weekly recap','YouTube','Long-form',1900,150,32],['Funniest chat moments','TikTok','Clip',31000,2600,140],['Sponsor read: energy drink','TikTok','Short',6800,300,19],['Build stream: hospital MLO','Kick','Live',900,0,190],['Server tour for new players','YouTube','Long-form',4200,310,77],['Raid gone wrong','TikTok','Clip',11000,700,40],['Q&A: how I run Digital Life','YouTube','Long-form',2600,230,95]];
   C.forEach((c,i)=>content.push({id:uid(),title:c[0],plat:c[1],type:c[2],date:iso(addDays(t,-Math.round(2+i*6.5))),views:c[3],likes:c[4],comments:c[5]}));
   return {daily,content,example:true}}
-const AN=()=>state.analytics;
+// Before Start Here is pressed (and before any real stats are logged), Statistics shows sample data
+let sampleAn=null;
+const previewing=()=>state.begun===false&&!state.example&&!(state.analytics.daily.length||state.analytics.content.length);
+const AN=()=>previewing()?(sampleAn=sampleAn||sampleAnalytics(today())):state.analytics;
 function anRange(){const t=today();let a,b=t;if(ui.anR==='cycle'){a=parse(state.start);if(a>t)a=t}else a=addDays(t,-(+ui.anR-1));const n=Math.round((b-a)/DAY)+1;return {a,b,n,pa:addDays(a,-n),pb:addDays(a,-1)}}
 function anPlats(){const order=TG('plats').map(x=>x.n),have=[...new Set(AN().daily.map(r=>r.plat).concat(AN().content.map(r=>r.plat)))];return have.sort((x,y)=>(order.indexOf(x)+99)%999-(order.indexOf(y)+99)%999)}
 const inR=(k,a,b)=>k>=iso(a)&&k<=iso(b);
@@ -147,7 +150,7 @@ function anModal(kind){ui.anm=kind;const B=$('anmBody'),t=iso(today()),pl=TG('pl
     $('anClear').onclick=()=>{const b=$('anClear');if(!b.dataset.sure){b.dataset.sure=1;b.textContent='Tap again to clear';return}state.analytics={daily:[],content:[],example:false};closeAn();commit();toast('Stats cleared')}}
   setTimeout(()=>{const f=B.querySelector('input:not([type=date]),textarea');if(f)f.focus()},0)}
 function closeAn(){$('anModal').hidden=true;ui.anm=null}
-function ingest(data){const A=AN();if(A.example){A.daily=[];A.content=[];A.example=false}let nd=0,nc=0;
+function ingest(data){const A=state.analytics;if(A.example){A.daily=[];A.content=[];A.example=false}let nd=0,nc=0;
   (data.daily||[]).forEach(r=>{if(!r||!/^\d{4}-\d\d-\d\d$/.test(r.date)||!r.plat)return;const row={date:r.date,plat:String(r.plat)};['followers','views','viewers','peak','hours'].forEach(f=>{if(r[f]!=null&&r[f]!==''&&!isNaN(+r[f]))row[f]=+r[f]});
     const i=A.daily.findIndex(x=>x.date===row.date&&x.plat===row.plat);if(i>=0)Object.assign(A.daily[i],row);else A.daily.push(row);nd++;
     if(!TG('plats').some(t=>t.n===row.plat))TG('plats').push({n:row.plat,c:'#9a9a9a'})});
